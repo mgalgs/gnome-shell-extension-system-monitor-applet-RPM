@@ -40,6 +40,8 @@ mkdir -p %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
 mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
 install -D -m 0644 %{uuid}/{convenience.js,extension.js,metadata.json,prefs.js,stylesheet.css,compat.js} \
   %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
+install -D -m 0755 %{uuid}/gpu_usage.sh \
+  %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
 install -D -m 0644 %{uuid}/schemas/org.gnome.shell.extensions.system-monitor.gschema.xml \
   %{buildroot}%{_datadir}/glib-2.0/schemas/
 
