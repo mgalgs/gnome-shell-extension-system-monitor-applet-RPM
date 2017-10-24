@@ -16,9 +16,11 @@ URL:            https://github.com/paradoxxxzero/gnome-shell-system-monitor-appl
 Source0:        https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 BuildArch:      noarch
 
-Requires:       gnome-shell >= 3.12.0
-
 BuildRequires:  gettext glib2
+
+Requires:       gnome-shell >= 3.12.0
+Requires:       libgtop2
+Requires:       NetworkManager-glib
 
 %description
 Display system information in gnome shell status bar, such as memory usage,
