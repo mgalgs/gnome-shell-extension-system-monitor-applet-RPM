@@ -7,7 +7,7 @@
 
 Name:           gnome-shell-extension-system-monitor-applet
 Version:        0
-Release:        0.2.20171005git%{shortcommit}%{?dist}
+Release:        0.3.20171005git%{shortcommit}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -19,8 +19,11 @@ BuildArch:      noarch
 BuildRequires:  gettext glib2
 
 Requires:       gnome-shell >= 3.12.0
-Requires:       libgtop2
-Requires:       NetworkManager-glib
+
+# CentOS 7 build environment doesn't support Recommends tag.
+%if 0%{?fedora}
+Recommends:     gnome-tweak-tool
+%endif
 
 %description
 Display system information in gnome shell status bar, such as memory usage,
@@ -54,6 +57,17 @@ popd
 
 %find_lang %{short_name}
 
+# CentOS 7 doesn't compile gschemas automatically, Fedora does.
+%if 0%{?rhel}
+%postun
+if [ $1 -eq 0 ] ; then
+    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+fi
+
+%posttrans
+    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+%endif
+
 %files -f %{short_name}.lang
 %doc README.md
 %license COPYING
@@ -61,6 +75,10 @@ popd
 %{_datadir}/gnome-shell/extensions/%{uuid}
 
 %changelog
+* Tue Oct 24 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 0-0.3.20171005git61b0a60
+- Add support for EPEL 7.
+- Revert upstream requires - Works with fresh vanilla Fedora with gnome-shell.
+
 * Tue Oct 24 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 0-0.2.20171005git61b0a60
 - Requires libgtop2 and NetworkManager-glib
 - Fix NVidia GPU support
