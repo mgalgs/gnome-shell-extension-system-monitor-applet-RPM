@@ -1,27 +1,30 @@
-%global uuid system-monitor@paradoxxx.zero.gmail.com
-%global gitname gnome-shell-system-monitor-applet
-%global short_name system-monitor
+%global extuuid    system-monitor@paradoxxx.zero.gmail.com
+%global extdir     %{_datadir}/gnome-shell/extensions/%{extuuid}
+%global gschemadir %{_datadir}/glib-2.0/schemas
+%global gitname    gnome-shell-system-monitor-applet
+%global giturl     https://github.com/paradoxxxzero/%{gitname}
 
-%global commit 61b0a60d74776455785ddb7a95851c2381961f6c
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Name:           gnome-shell-extension-system-monitor-applet
-Version:        0
-Release:        0.3.20171005git%{shortcommit}%{?dist}
+Epoch:          1
+Version:        33
+Release:        1%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
-URL:            https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet
-Source0:        https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
+URL:            https://extensions.gnome.org/extension/120/system-monitor/
+Source0:        %{giturl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+
 BuildArch:      noarch
 
-BuildRequires:  gettext glib2
+BuildRequires:  gettext
+BuildRequires:  %{_bindir}/glib-compile-schemas
 
-Requires:       gnome-shell >= 3.12.0
+Requires:       gnome-shell-extension-common
 
 # CentOS 7 build environment doesn't support Recommends tag.
-%if 0%{?fedora}
+%if 0%{?fedora} || 0%{?rhel} >= 8
 Recommends:     gnome-tweak-tool
 %endif
 
@@ -29,52 +32,59 @@ Recommends:     gnome-tweak-tool
 Display system information in gnome shell status bar, such as memory usage,
 CPU usage, and network rate...
 
+
 %prep
-%setup -qn %{gitname}-%{commit}
+%autosetup -n %{gitname}-%{version} -p 1
+
 
 %build
-# Build translations
-pushd po
-  # Since rpm-build package depends on sed, bash and findutils packages, 
-  # we can use find, sed, xargs and bash commands in build process
-  find ./*/ -type f \( -name "*.po" -o -name "*.pot" \) -print | sed 's/\(.*\)\(\.po.*\)/\1/g' | xargs -I {} bash -c 'if [ ! -f "{}.po" ] && [ -f "{}.pot" ] ; then mv "{}.pot" "{}.po" ; fi ; msgfmt -o "{}.mo" "{}.po"'
-popd
+%make_build
+
 
 %install
-mkdir -p %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
-mkdir -p %{buildroot}%{_datadir}/glib-2.0/schemas/
-install -D -m 0644 %{uuid}/{convenience.js,extension.js,metadata.json,prefs.js,stylesheet.css,compat.js} \
-  %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
-install -D -m 0755 %{uuid}/gpu_usage.sh \
-  %{buildroot}%{_datadir}/gnome-shell/extensions/%{uuid}/
-install -D -m 0644 %{uuid}/schemas/org.gnome.shell.extensions.system-monitor.gschema.xml \
-  %{buildroot}%{_datadir}/glib-2.0/schemas/
+%make_install
 
-# Translations.
-pushd po
-  find ./*/ -type f -name "*.mo" -printf "install -pD -m 0644 %h/%f %{buildroot}%{_datadir}/locale/%h/LC_MESSAGES/%f\n" | sed 's/\.\///g' | xargs -I {} bash -c '{}'
-popd
+# Cleanup crap.
+%{__rm} -fr %{buildroot}%{extdir}/{COPYING*,README*,locale,schemas}
 
-%find_lang %{short_name}
+# Install schema.
+%{__mkdir} -p %{buildroot}%{gschemadir}
+%{__cp} -pr %{extuuid}/schemas/*gschema.xml %{buildroot}%{gschemadir}
+
+# Install i18n.
+%{_bindir}/find %{extuuid} -name '*.po' -print -delete
+%{__cp} -pr %{extuuid}/locale %{buildroot}%{_datadir}
+
+# Create manifest for i18n.
+%find_lang %{name} --all-name
+
 
 # CentOS 7 doesn't compile gschemas automatically, Fedora does.
-%if 0%{?rhel}
+%if 0%{?rhel} && 0%{?rhel} <= 7
 %postun
 if [ $1 -eq 0 ] ; then
-    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+  %{_bindir}/glib-compile-schemas %{gschemadir} &> /dev/null || :
 fi
 
 %posttrans
-    /usr/bin/glib-compile-schemas %{_datadir}/glib-2.0/schemas &> /dev/null || :
+%{_bindir}/glib-compile-schemas %{gschemadir} &> /dev/null || :
 %endif
 
-%files -f %{short_name}.lang
+
+%files -f %{name}.lang
 %doc README.md
 %license COPYING
-%{_datadir}/glib-2.0/schemas/org.gnome.shell.extensions.system-monitor.gschema.xml
-%{_datadir}/gnome-shell/extensions/%{uuid}
+%{extdir}
+%{gschemadir}/*gschema.xml
+
 
 %changelog
+* Sat Dec 02 2017 Björn Esser <besser82@fedoraproject.org> - 1:33-1
+- New upstream release
+- Follow upstream versioning
+- Bump Epoch since previous people messed up the versioning scheme
+- Simplify packaging
+
 * Tue Oct 24 2017 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 0-0.3.20171005git61b0a60
 - Add support for EPEL 7.
 - Revert upstream requires - Works with fresh vanilla Fedora with gnome-shell.
