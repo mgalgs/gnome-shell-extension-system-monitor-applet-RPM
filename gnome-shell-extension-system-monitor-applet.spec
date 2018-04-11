@@ -4,17 +4,25 @@
 %global gitname    gnome-shell-system-monitor-applet
 %global giturl     https://github.com/paradoxxxzero/%{gitname}
 
+%global git_post_release_enabled 1
+
+%if 0%{?git_post_release_enabled}
+  # Git commit is needed for post-release version.
+  %global gitcommit 751d5573d052fc05cc3aa34d5aea097b2c012ba7
+  %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
+  %global gitsnapinfo .20180410git%{gitshortcommit}
+%endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
-Version:        33
-Release:        2%{?dist}
+Version:        35
+Release:        1%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
-Source0:        %{giturl}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
 
 BuildArch:      noarch
 
@@ -28,13 +36,14 @@ Requires:       gnome-shell-extension-common
 Recommends:     gnome-tweak-tool
 %endif
 
+
 %description
 Display system information in gnome shell status bar, such as memory usage,
 CPU usage, and network rate...
 
 
 %prep
-%autosetup -n %{gitname}-%{version} -p 1
+%autosetup -n %{gitname}-%{?gitcommit}%{!?gitcommit:%{version}} -p 1
 
 
 %build
@@ -42,9 +51,9 @@ CPU usage, and network rate...
 
 
 %install
-%make_install
+%make_install VERSION=%{version}
 
-# Cleanup crap.
+# Cleanup unused files.
 %{__rm} -fr %{buildroot}%{extdir}/{COPYING*,README*,locale,schemas}
 
 # Install schema.
@@ -79,6 +88,12 @@ fi
 
 
 %changelog
+* Tue Apr 10 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 1:35-1.20180410git751d557
+- Updated to last upstream commits
+- Added the ability to manage post-release versions (git commit hash) and
+  try not to mess up the version schema
+- Added VERSION variable to install section to avoid git fatal message
+
 * Wed Feb 07 2018 Fedora Release Engineering <releng@fedoraproject.org> - 1:33-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
