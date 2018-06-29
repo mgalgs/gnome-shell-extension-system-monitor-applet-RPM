@@ -4,19 +4,19 @@
 %global gitname    gnome-shell-system-monitor-applet
 %global giturl     https://github.com/paradoxxxzero/%{gitname}
 
-%global git_post_release_enabled 1
+%{!?git_post_release_enabled: %global git_post_release_enabled 1}
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 751d5573d052fc05cc3aa34d5aea097b2c012ba7
+  %global gitcommit d0b3a3ab68cd824878c4e79ea164810d0631d826
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20180410git%{gitshortcommit}
+  %global gitsnapinfo .20180629git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        35
-Release:        1%{?gitsnapinfo}%{?dist}
+Release:        2%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -88,6 +88,10 @@ fi
 
 
 %changelog
+* Fri Jun 29 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 1:35-2.20180629gitd0b3a3a
+- Updated to last upstream commits
+- Improve post-release versions management
+
 * Tue Apr 10 2018 Nicolas Viéville <nicolas.vieville@univ-valenciennes.fr> - 1:35-1.20180410git751d557
 - Updated to last upstream commits
 - Added the ability to manage post-release versions (git commit hash) and
