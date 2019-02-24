@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit d341bf65ad4351b72d0fbe5139f9e753a6a889ab
+  %global gitcommit 2583911aa26239ccafdaaee3333e44bfb01f30d9
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20190116git%{gitshortcommit}
+  %global gitsnapinfo .20190224git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        36
-Release:        3%{?gitsnapinfo}%{?dist}
+Release:        4%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -88,6 +88,13 @@ fi
 
 
 %changelog
+* Sun Feb 24 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:36-4.20190224git2583911
+- Updated to last upstream commits
+- Get rid of synchronous IO (read)
+- Add Japanese translation
+- Fix translation for 'GiB' in German
+- Add a Makefile target to reload the extension
+
 * Thu Jan 31 2019 Fedora Release Engineering <releng@fedoraproject.org> - 1:36-3.20190116gitd341bf6
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
