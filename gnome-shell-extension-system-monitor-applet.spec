@@ -8,21 +8,28 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 2583911aa26239ccafdaaee3333e44bfb01f30d9
+  %global gitcommit c08bfd79d2ab304a1bc70c9043ccf8590eecf10e
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20190224git%{gitshortcommit}
+  %global gitsnapinfo .20190427git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        36
-Release:        4%{?gitsnapinfo}%{?dist}
+Release:        5%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
+# These 2 patches were proposed upstream in the same pull request:
+# https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/516
+# The first one fixes a typo in DESTDIR variable in Makefile
+# The second adds BUILD_FOR_RPM variable to Makefile to be able to build
+# a RPM package
+Patch0:         gnome-shell-extension-system-monitor-applet-001_fix_DESTDIR_for_admin_users.patch
+Patch1:         gnome-shell-extension-system-monitor-applet-002_add_build_for_RPM_feature.patch
 
 BuildArch:      noarch
 
@@ -47,11 +54,11 @@ CPU usage, and network rate...
 
 
 %build
-%make_build
+%make_build DESTDIR=%{buildroot} BUILD_FOR_RPM=1
 
 
 %install
-%make_install VERSION=%{version}
+%make_install VERSION=%{version} BUILD_FOR_RPM=1
 
 # Cleanup unused files.
 %{__rm} -fr %{buildroot}%{extdir}/{COPYING*,README*,locale,schemas}
@@ -88,6 +95,12 @@ fi
 
 
 %changelog
+* Sat Apr 27 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:36-5.20190427gitc08bfd7
+- Updated to last upstream commits
+- Reworked Makefile
+- Support for gnome-shell 3.32 added
+- Added patches to support Fedora RPM package build
+
 * Sun Feb 24 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:36-4.20190224git2583911
 - Updated to last upstream commits
 - Get rid of synchronous IO (read)

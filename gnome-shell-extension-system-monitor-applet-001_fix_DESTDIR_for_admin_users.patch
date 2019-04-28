@@ -1,0 +1,26 @@
+From fe72a9de4167c633820450d6286917d53e26275c Mon Sep 17 00:00:00 2001
+From: Nicolas Viéville <nicolas.vieville@uphf.fr>
+Date: Sun, 28 Apr 2019 13:05:46 +0200
+Subject: [PATCH] Fix DESTDIR for admin users
+
+Signed-off-by: Nicolas Viéville <nicolas.vieville@uphf.fr>
+---
+ Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 093f2f3..e56a479 100644
+--- a/Makefile
++++ b/Makefile
+@@ -22,7 +22,7 @@ ifeq ($(strip $(DESTDIR)),)
+   INSTALLBASE = $(HOME)/.local/share/gnome-shell/extensions
+   SUDO=
+ else
+-  INSTALLBASE = $(DESTDIR)usr/share/gnome-shell/extensions
++  INSTALLBASE = $(DESTDIR)/usr/share/gnome-shell/extensions
+   SUDO=sudo
+ endif
+ 
+-- 
+2.20.1
+
