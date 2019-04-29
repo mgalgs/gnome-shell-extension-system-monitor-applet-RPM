@@ -4,32 +4,25 @@
 %global gitname    gnome-shell-system-monitor-applet
 %global giturl     https://github.com/paradoxxxzero/%{gitname}
 
-%{!?git_post_release_enabled: %global git_post_release_enabled 1}
+%{!?git_post_release_enabled: %global git_post_release_enabled 0}
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit c08bfd79d2ab304a1bc70c9043ccf8590eecf10e
+  %global gitcommit 13df143774cdb6ae0f3e54dc5674e47b70413fd0
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20190427git%{gitshortcommit}
+  %global gitsnapinfo .20190429git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
-Version:        36
-Release:        5%{?gitsnapinfo}%{?dist}
+Version:        38
+Release:        1%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
-# These 2 patches were proposed upstream in the same pull request:
-# https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/516
-# The first one fixes a typo in DESTDIR variable in Makefile
-# The second adds BUILD_FOR_RPM variable to Makefile to be able to build
-# a RPM package
-Patch0:         gnome-shell-extension-system-monitor-applet-001_fix_DESTDIR_for_admin_users.patch
-Patch1:         gnome-shell-extension-system-monitor-applet-002_add_build_for_RPM_feature.patch
 
 BuildArch:      noarch
 
@@ -95,6 +88,10 @@ fi
 
 
 %changelog
+* Mon Apr 29 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-1
+- New upstream release (Fedora patches applied - RHBZ#1703693)
+- Dropped previous Fedora patches
+
 * Sat Apr 27 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:36-5.20190427gitc08bfd7
 - Updated to last upstream commits
 - Reworked Makefile
