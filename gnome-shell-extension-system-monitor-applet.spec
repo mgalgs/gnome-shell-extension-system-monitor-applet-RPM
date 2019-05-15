@@ -4,19 +4,19 @@
 %global gitname    gnome-shell-system-monitor-applet
 %global giturl     https://github.com/paradoxxxzero/%{gitname}
 
-%{!?git_post_release_enabled: %global git_post_release_enabled 0}
+%{!?git_post_release_enabled: %global git_post_release_enabled 1}
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 13df143774cdb6ae0f3e54dc5674e47b70413fd0
+  %global gitcommit fc83a737e85f223bf7e5bdf0179f8e9b30dc1d13
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20190429git%{gitshortcommit}
+  %global gitsnapinfo .20190515git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        1%{?gitsnapinfo}%{?dist}
+Release:        2%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -88,6 +88,15 @@ fi
 
 
 %changelog
+* Wed May 15 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-2.20190515gitfc83a73
+- Updated to last upstream commits
+- Fix #504  (array.to string() warnings)
+- Remove obsolete compatibility code
+- Scale width of elements if compact display is on
+- Updated translation files
+- Reverted ByteArray usage breaking display of thermal and fan speed
+- Fixed frequency display showing blank due to ByteArray.tostring
+
 * Mon Apr 29 2019 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-1
 - New upstream release (Fedora patches applied - RHBZ#1703693)
 - Dropped previous Fedora patches
