@@ -8,21 +8,23 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit f00e2487b918248df0c55495b4fd37a365fe7352
+  %global gitcommit cd2704c219da5f36e4f93fc3a06260d9ae68bad3
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20191019git%{gitshortcommit}
+  %global gitsnapinfo .20200325git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        5%{?gitsnapinfo}%{?dist}
+Release:        6%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
+Patch0:         gnome-shell-extension-system-monitor-applet-001_fix_typo_nvidia-settings.patch
+Patch1:         gnome-shell-extension-system-monitor-applet-002_Improve_fetching_values_for_NVidia_GPU_usage.patch
 
 BuildArch:      noarch
 
@@ -88,6 +90,12 @@ fi
 
 
 %changelog
+* Wed Mar 25 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-6.20200325gitcd2704c
+- Updated to last upstream commits
+- Translate to Turkish language
+- Add patch to fix typo nvidia-settings in gpu_usage.sh - RHBZ#1794158
+- Add patch to improve fetching values for NVidia GPU usage
+
 * Tue Jan 28 2020 Fedora Release Engineering <releng@fedoraproject.org> - 1:38-5.20191019gitf00e248
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 

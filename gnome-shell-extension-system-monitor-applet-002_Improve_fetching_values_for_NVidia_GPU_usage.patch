@@ -1,0 +1,28 @@
+From 580a91b6e15520fef4421ed4000c74098eaa1429 Mon Sep 17 00:00:00 2001
+From: Nicolas Viéville <nicolas.vieville@uphf.fr>
+Date: Wed, 25 Mar 2020 15:55:47 +0100
+Subject: [PATCH] Improve fetching values for NVidia GPU usage.
+
+Signed-off-by: Nicolas Viéville <nicolas.vieville@uphf.fr>
+---
+ system-monitor@paradoxxx.zero.gmail.com/gpu_usage.sh | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/system-monitor@paradoxxx.zero.gmail.com/gpu_usage.sh b/system-monitor@paradoxxx.zero.gmail.com/gpu_usage.sh
+index 76ab326..56a5c89 100755
+--- a/system-monitor@paradoxxx.zero.gmail.com/gpu_usage.sh
++++ b/system-monitor@paradoxxx.zero.gmail.com/gpu_usage.sh
+@@ -29,9 +29,7 @@ checkcommand()
+ # This will print three lines. The first one is the the total vRAM available,
+ # the second one is the used vRAM and the third on is the GPU usage in %.
+ if checkcommand nvidia-smi; then
+-	nvidia-smi -i -1 -q -d MEMORY | grep -A4 -i gpu | egrep -i "used|total" | awk '{print $3}'
+-	# This line will print the GPU usage in %.
+-	sed -e 's#.*=\(\)#\1#;s'/.$//'' <<< $(nvidia-settings -q all | grep -i GPUUtilization | grep graphics | awk '{print $4}')
++	nvidia-smi -i 0 --query-gpu=memory.total,memory.used,utilization.gpu --format=csv,noheader,nounits | sed 's%, %\n%g'
+ elif checkcommand glxinfo; then
+ 	TOTALVRAM="`glxinfo | grep -A2 -i GL_NVX_gpu_memory_info | egrep -i "dedicated" | cut -f2- -d ':' | gawk '{print $1}'`"
+ 	AVAILVRAM="`glxinfo | grep -A4 -i GL_NVX_gpu_memory_info | egrep -i "available dedicated" | cut -f2- -d ':' | gawk '{print $1}'`"
+-- 
+2.25.1
+
