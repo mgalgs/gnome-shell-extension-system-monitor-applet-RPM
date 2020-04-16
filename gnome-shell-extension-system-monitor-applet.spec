@@ -8,23 +8,21 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit cd2704c219da5f36e4f93fc3a06260d9ae68bad3
+  %global gitcommit 32cc79e140c88d05067a95704a837c91acc8b6a6
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20200325git%{gitshortcommit}
+  %global gitsnapinfo .20200416git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        6%{?gitsnapinfo}%{?dist}
+Release:        7%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
-Patch0:         gnome-shell-extension-system-monitor-applet-001_fix_typo_nvidia-settings.patch
-Patch1:         gnome-shell-extension-system-monitor-applet-002_Improve_fetching_values_for_NVidia_GPU_usage.patch
 
 BuildArch:      noarch
 
@@ -90,6 +88,14 @@ fi
 
 
 %changelog
+* Thu Apr 16 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-7.20200416git32cc79e
+- Updated to last upstream commits
+- Support for gnome-shell 3.36 added, and keep legacy usage
+- Be able to show preferences from menu
+- Make compact work even on resize
+- Use UPower directly to remove warning
+- Dropped patches (applied upstream)
+
 * Wed Mar 25 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-6.20200325gitcd2704c
 - Updated to last upstream commits
 - Translate to Turkish language
