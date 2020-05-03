@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 32cc79e140c88d05067a95704a837c91acc8b6a6
+  %global gitcommit 7f8f0a7b255473941f14d1dcaa35ebf39d3bccd0
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20200416git%{gitshortcommit}
+  %global gitsnapinfo .20200503git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        7%{?gitsnapinfo}%{?dist}
+Release:        8%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -31,9 +31,9 @@ BuildRequires:  %{_bindir}/glib-compile-schemas
 
 Requires:       gnome-shell-extension-common
 
-# CentOS 7 build environment doesn't support Recommends tag.
+# CentOS 7 build environment doesn't support Suggests tag.
 %if 0%{?fedora} || 0%{?rhel} >= 8
-Recommends:     gnome-tweak-tool
+Suggests:       gnome-tweaks
 %endif
 
 
@@ -88,6 +88,13 @@ fi
 
 
 %changelog
+* Sun May 03 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-8.20200503git7f8f0a7
+- Updated to last upstream commits
+- Fix string warning: Use ByteArray
+- Fixed malformed nl translation. Updated makefile to put builds in ./dist
+- Cleaned and switched Recommends tag for gnome-tweaks to Suggests tag as dnf
+  treats it as Requires tag - RHBZ#1830474
+
 * Thu Apr 16 2020 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-7.20200416git32cc79e
 - Updated to last upstream commits
 - Support for gnome-shell 3.36 added, and keep legacy usage
