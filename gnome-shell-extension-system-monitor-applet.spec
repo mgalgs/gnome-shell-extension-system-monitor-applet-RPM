@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 7f8f0a7b255473941f14d1dcaa35ebf39d3bccd0
+  %global gitcommit 0b421263a4cef2833f1c11766a6dca2a32cbb6da
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20200503git%{gitshortcommit}
+  %global gitsnapinfo .20210320git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        10%{?gitsnapinfo}%{?dist}
+Release:        11%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -28,7 +28,7 @@ BuildArch:      noarch
 
 BuildRequires:  gettext
 BuildRequires:  %{_bindir}/glib-compile-schemas
-BuildRequires: make
+BuildRequires:  make
 
 Requires:       gnome-shell-extension-common
 
@@ -89,6 +89,14 @@ fi
 
 
 %changelog
+* Sat Mar 20 2021 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-11.20210320git0b42126
+- Updated to last upstream commits
+- Fix gnome-shell and information spelling
+- Fix for top left corner info
+- Use utilities-system-monitor icon
+- Numerous fixes for translations and locales handling
+- Fix GPU not translated
+
 * Tue Jan 26 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:38-10.20200503git7f8f0a7
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
