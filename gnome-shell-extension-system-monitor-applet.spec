@@ -8,22 +8,29 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 0b421263a4cef2833f1c11766a6dca2a32cbb6da
+  %global gitcommit bc38ccf49ac0ffae0fc0436f3c2579fc86949f10
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20210320git%{gitshortcommit}
+  %global gitsnapinfo .20210507git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        11%{?gitsnapinfo}%{?dist}
+Release:        12%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
-
+# These 2 patches were proposed upstream in the same pull request:
+# https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/691
+# The first one allows preferences window to be displayed (had to fix methods
+# names for GtkBox).
+# The second avoids extension warnings in gnome-shell journal (journalctl -qxe)
+Patch0:         gnome-shell-extension-system-monitor-applet-001_Fix_too_many_arguments_to_method_gtk_box_prepend.patch
+Patch1:         gnome-shell-extension-system-monitor-applet-002_fix_implicite_call_array_tostring.patch
+ 
 BuildArch:      noarch
 
 BuildRequires:  gettext
@@ -89,6 +96,17 @@ fi
 
 
 %changelog
+* Fri May 07 2021 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-12.20210507gitbc38ccf
+- Updated to last upstream commits
+- Added and updated translations
+- Add units for network speeds over one gigabit
+- Don't use version but check for function
+- Fixed thermal sensor dropdown label rendering
+- Prevent refreshes while the Shell is busy
+- gpu_usage.sh improvements
+- prefs: Remove unused Clutter reference
+- Update prefs to support gnome 40 - RHBZ#1956148, RHBZ#1957479
+
 * Sat Mar 20 2021 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-11.20210320git0b42126
 - Updated to last upstream commits
 - Fix gnome-shell and information spelling

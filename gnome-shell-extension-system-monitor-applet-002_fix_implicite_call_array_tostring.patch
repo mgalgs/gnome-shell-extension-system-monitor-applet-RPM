@@ -1,0 +1,27 @@
+From d097cbd11d38b051e19388d57f1e3d6c6748c923 Mon Sep 17 00:00:00 2001
+From: Nicolas Viéville <nicolas.vieville@uphf.fr>
+Date: Tue, 4 May 2021 12:31:28 +0200
+Subject: [PATCH] Fix implicite call array.toString() on a Uint8Array instance
+ in extension.js 1575:31
+
+Signed-off-by: Nicolas Viéville <nicolas.vieville@uphf.fr>
+---
+ system-monitor@paradoxxx.zero.gmail.com/extension.js | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/system-monitor@paradoxxx.zero.gmail.com/extension.js b/system-monitor@paradoxxx.zero.gmail.com/extension.js
+index 4e83e35..f8b8c1e 100644
+--- a/system-monitor@paradoxxx.zero.gmail.com/extension.js
++++ b/system-monitor@paradoxxx.zero.gmail.com/extension.js
+@@ -1572,7 +1572,7 @@ const Freq = class SystemMonitor_Freq extends ElementBase {
+         var that = this;
+         file.load_contents_async(null, function cb(source, result) {
+             let as_r = source.load_contents_finish(result);
+-            total_frequency += parseInt(as_r[1]);
++            total_frequency += parseInt(parse_bytearray(as_r[1]));
+ 
+             if (++i >= num_cpus) {
+                 that.freq = Math.round(total_frequency / num_cpus / 1000);
+-- 
+2.31.1
+
