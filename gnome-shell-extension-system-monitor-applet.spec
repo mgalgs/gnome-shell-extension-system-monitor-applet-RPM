@@ -8,28 +8,21 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit bc38ccf49ac0ffae0fc0436f3c2579fc86949f10
+  %global gitcommit 9a96c54f986ca612097d7063ded0d9de90457e29
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20210507git%{gitshortcommit}
+  %global gitsnapinfo .20210722git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        13%{?gitsnapinfo}%{?dist}
+Release:        14%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPLv3+ and BSD
 URL:            https://extensions.gnome.org/extension/120/system-monitor/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
-# These 2 patches were proposed upstream in the same pull request:
-# https://github.com/paradoxxxzero/gnome-shell-system-monitor-applet/pull/691
-# The first one allows preferences window to be displayed (had to fix methods
-# names for GtkBox).
-# The second avoids extension warnings in gnome-shell journal (journalctl -qxe)
-Patch0:         gnome-shell-extension-system-monitor-applet-001_Fix_too_many_arguments_to_method_gtk_box_prepend.patch
-Patch1:         gnome-shell-extension-system-monitor-applet-002_fix_implicite_call_array_tostring.patch
  
 BuildArch:      noarch
 
@@ -96,6 +89,16 @@ fi
 
 
 %changelog
+* Thu Jul 22 2021 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-14.20210722git9a96c54
+- Updated to last upstream commits
+- Added GPU stats for AMDGPU
+- Added support for displaying GPU memory in the chart
+- Add support for display scale factor
+- Small fixes to thermal monitoring
+- Added support for gnome-shell 40 - Removed Fedora patches (applied upstream)
+- Remove clutter dependency on GNOME 40
+- Improve graph settings and rendering
+
 * Thu Jul 22 2021 Fedora Release Engineering <releng@fedoraproject.org> - 1:38-13.20210507gitbc38ccf
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_35_Mass_Rebuild
 
