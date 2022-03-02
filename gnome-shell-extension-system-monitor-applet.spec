@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 11d43a8a403e469d96454ee3e5f7c01f07d8a34a
+  %global gitcommit 2c6eb0a447bfc9f1a07c61956c92a55c874baf16
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20211103git%{gitshortcommit}
+  %global gitsnapinfo .20220301git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        16%{?gitsnapinfo}%{?dist}
+Release:        17%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -48,11 +48,11 @@ CPU usage, and network rate...
 
 
 %build
-%make_build DESTDIR=%{buildroot} BUILD_FOR_RPM=1
+%make_build BUILD_FOR_RPM=1
 
 
 %install
-%make_install VERSION=%{version} BUILD_FOR_RPM=1
+%make_install VERSION=%{version} DESTDIR=%{buildroot} BUILD_FOR_RPM=1
 
 # Cleanup unused files.
 %{__rm} -fr %{buildroot}%{extdir}/{COPYING*,README*,locale,schemas}
@@ -89,6 +89,11 @@ fi
 
 
 %changelog
+* Tue Mar 01 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-17.20220301git2c6eb0a
+- Updated to last upstream commits
+- Added support for gnome 42
+- Fixes SPEC file for rpmlint error rpm-buildroot-usage
+
 * Thu Jan 20 2022 Fedora Release Engineering <releng@fedoraproject.org> - 1:38-16.20211103git11d43a8
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_36_Mass_Rebuild
 
