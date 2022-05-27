@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 2c6eb0a447bfc9f1a07c61956c92a55c874baf16
+  %global gitcommit b359d888fd3fcccf1252f5f1dc390299e701493e
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20220301git%{gitshortcommit}
+  %global gitsnapinfo .20220527git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        17%{?gitsnapinfo}%{?dist}
+Release:        18%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -89,6 +89,12 @@ fi
 
 
 %changelog
+* Fri May 27 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-18.20220527gitb359d88
+- Added built for RHEL9
+- Updated to last upstream commits
+- Updated Brazilian Portuguese and Portuguese translations
+- Updated README.md file
+
 * Tue Mar 01 2022 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-17.20220301git2c6eb0a
 - Updated to last upstream commits
 - Added support for gnome 42
