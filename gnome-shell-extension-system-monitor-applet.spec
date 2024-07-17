@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 4a1cfff514dc4feeaef8727ceed008029d01fed7
+  %global gitcommit 4bd03a2944f124a493ab8fe0df757c45f00b9c81
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20240502git%{gitshortcommit}
+  %global gitsnapinfo .20240717git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        29%{?gitsnapinfo}%{?dist}
+Release:        30%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -89,6 +89,16 @@ fi
 
 
 %changelog
+* Wed Jul 17 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-30.20240717git4bd03a2
+- Updated to last upstream commits
+- Fix sensors labels determinism - RHBZ#2186601
+  Thanks to Dominik Mierzejewski
+- Change message shown when no fan/temperature sensor files are found - prefs.js
+- Use template literals in common.js
+- GPU: Un-hardcode /bin/bash location
+- Fix common.js missing from build
+- Update compiled Portuguese locales to resolve permadiff
+
 * Thu May 02 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-29.20240502git4a1cfff
 - Updated to last upstream commits
 - Fix tooltip text being garbled/blurry
