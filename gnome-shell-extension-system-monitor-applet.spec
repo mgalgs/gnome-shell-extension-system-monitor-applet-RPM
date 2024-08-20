@@ -8,20 +8,20 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 4bd03a2944f124a493ab8fe0df757c45f00b9c81
+  %global gitcommit 81f07cea31c14968475aa15d60adcf22cbcb2d25
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20240717git%{gitshortcommit}
+  %global gitsnapinfo .20240820git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        31%{?gitsnapinfo}%{?dist}
+Release:        32%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
 License:        GPL-3.0-or-later AND BSD-3-Clause
-URL:            https://extensions.gnome.org/extension/120/system-monitor/
+URL:            https://extensions.gnome.org/extension/3010/system-monitor-next/
 Source0:        %{giturl}/archive/%{?gitcommit}%{!?gitcommit:v%{version}}/%{name}-%{version}%{?gitshortcommit:-%{gitshortcommit}}.tar.gz
 
 BuildArch:      noarch
@@ -89,6 +89,12 @@ fi
 
 
 %changelog
+* Tue Aug 20 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-32.20240820git81f07ce
+- Updated to last upstream commits
+- Focus fan graph on reported range
+- Add option to rotate chart labels
+- Adjust URL accordingly to the switch to the forked github sources repository
+
 * Thu Jul 18 2024 Fedora Release Engineering <releng@fedoraproject.org> - 1:38-31.20240717git4bd03a2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_41_Mass_Rebuild
 
