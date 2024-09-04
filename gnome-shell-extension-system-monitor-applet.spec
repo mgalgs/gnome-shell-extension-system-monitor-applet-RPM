@@ -8,15 +8,15 @@
 
 %if 0%{?git_post_release_enabled}
   # Git commit is needed for post-release version.
-  %global gitcommit 81f07cea31c14968475aa15d60adcf22cbcb2d25
+  %global gitcommit 94916490f8ed1f47902af46cbde182013cd3f0b7
   %global gitshortcommit %(c=%{gitcommit}; echo ${c:0:7})
-  %global gitsnapinfo .20240820git%{gitshortcommit}
+  %global gitsnapinfo .20240904git%{gitshortcommit}
 %endif
 
 Name:           gnome-shell-extension-system-monitor-applet
 Epoch:          1
 Version:        38
-Release:        32%{?gitsnapinfo}%{?dist}
+Release:        33%{?gitsnapinfo}%{?dist}
 Summary:        A Gnome shell system monitor extension
 
 # The entire source code is GPLv3+ except convenience.js, which is BSD
@@ -89,6 +89,13 @@ fi
 
 
 %changelog
+* Wed Sep 04 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-33.20240904git9491649
+- Updated to last upstream commits
+- Drop unused compat.js
+- Use Cogl.Color instead of Clutter.Color
+- Add 47 to supported shell versions
+- Drop debug log
+
 * Tue Aug 20 2024 Nicolas Viéville <nicolas.vieville@uphf.fr> - 1:38-32.20240820git81f07ce
 - Updated to last upstream commits
 - Focus fan graph on reported range
