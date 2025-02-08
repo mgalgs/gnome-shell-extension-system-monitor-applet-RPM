@@ -1,7 +1,7 @@
 %global extuuid    system-monitor-next@paradoxxx.zero.gmail.com
 %global extdir     %{_datadir}/gnome-shell/extensions/%{extuuid}
 %global gschemadir %{_datadir}/glib-2.0/schemas
-%global gitname    gnome-shell-system-monitor-applet
+%global gitname    gnome-shell-system-monitor-next-applet
 %global giturl     https://github.com/mgalgs/%{gitname}
 
 %{!?git_post_release_enabled: %global git_post_release_enabled 1}
