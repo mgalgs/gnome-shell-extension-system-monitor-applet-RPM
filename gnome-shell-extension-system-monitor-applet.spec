@@ -48,11 +48,12 @@ CPU usage, and network rate...
 
 
 %build
-%make_build BUILD_FOR_RPM=1
+# Not needed as build target is a dependency of install target in
+# upstream Makefile
 
 
 %install
-%make_install VERSION=%{version} DESTDIR=%{buildroot} BUILD_FOR_RPM=1
+%make_install VERSION=%{version} PREFIX=%{buildroot}%{_prefix}
 
 # Cleanup unused files.
 %{__rm} -fr %{buildroot}%{extdir}/{COPYING*,README*,locale,schemas}
